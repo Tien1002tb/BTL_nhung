@@ -69,7 +69,6 @@ void mainmenu(void){
 			lcd_i2c_msg(1 ,1, 0, "MAN HINH CHINH");
 			lcd_i2c_msg(1 ,2, 0, ">TIEP");
 			DelayMs(50);
-}
 		break;
 		case 1:
 			mannhietdo();
