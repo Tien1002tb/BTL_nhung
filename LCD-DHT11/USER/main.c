@@ -12,9 +12,8 @@
 #include "lcd_1602_drive.h"
 #include "dht11.h"
 
-
 #define GPIO_PORT GPIOA
-#define DEN  GPIO_Pin_0
+#define DEN  GPIO_Pin_2
 #define QUAT GPIO_Pin_1
 #define CONG GPIO_Pin_3
 #define TRU GPIO_Pin_4
@@ -38,6 +37,7 @@ void mansetting1(void);
 void mansetting2(void);
 void Setting(void);
 
+void mainmenu(void *p);
 void hienthi_LCD(void *p); //hien thi nhiet do , do am len LCD
 void GPIO_active(void *p); // hoat dong cua ngoai vi (den,quat)
 void GT_esp32(void *p); // truyen du lieu tu stm32 sang esp32
@@ -68,7 +68,9 @@ void gpio_Init(void){
 	GPIO_Init(GPIOA,&GPIO_Structure);	
 }
 
-void mainmenu(void){
+void mainmenu(void *p){
+	gpio_Init();
+	DHT11_Init();
 	while(1){
 	systick_init();// initialize the delay function (Must initialize)
 	lcd_i2c_init(1);
@@ -106,6 +108,8 @@ void mainmenu(void){
 	}
 }
 void mannhietdo(void){
+	gpio_Init();
+	DHT11_Init();
 	lcd_i2c_cmd(1,0x01); // Clear Display
 	while(1){
 	DHT11_Read_Data(&RHI, &RHD, &TCI, &TCD);
@@ -117,6 +121,8 @@ void mannhietdo(void){
 }
 	}
 void mansetting1(void){
+	gpio_Init();
+	DHT11_Init();
 	while(1){
 	sprintf(Temp1 ,"SET >T:%u *C", TCI_set);
 	lcd_i2c_msg(1 ,1, 0, Temp2);
@@ -127,6 +133,8 @@ void mansetting1(void){
 }
 
 void mansetting2(void){
+	gpio_Init();
+	DHT11_Init();
 	while(1){
 	sprintf(Temp1 ,"SET T:%u *C", TCI_set);
 	lcd_i2c_msg(1 ,1, 0, Temp2);
@@ -136,6 +144,8 @@ void mansetting2(void){
 	}
 }
 void Setting(void){
+	gpio_Init();
+	DHT11_Init();
 	while(1){
 	if (congtru_tong == 2){
 		if (GPIO_ReadInputDataBit(GPIO_PORT, CONG) == 0){ // nut tang nhiet do 
@@ -170,6 +180,7 @@ void Setting(void){
 
 //Dieu khien DEN , Quat 
 void GPIO_active(void *p){
+	gpio_Init();
 	while(1){
 		if(TCI_set <= TCI){
 			GPIO_SetBits( GPIO_PORT , DEN);	
