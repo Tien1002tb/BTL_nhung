@@ -45,6 +45,7 @@ void GT_esp32(void *p); // truyen du lieu tu stm32 sang esp32
 int main(void){
 	gpio_Init();
 	DHT11_Init();
+	xTaskCreate(mainmenu, (const char*)"menu",128 , NULL,1, NULL);
 	xTaskCreate(GT_esp32, (const char*)"Gtiep_esp32",128 , NULL,1, NULL);
 	xTaskCreate(hienthi_LCD, (const char*)"Display",128 , NULL,1, NULL);
 	xTaskCreate(GPIO_active, (const char*)"GPIO",128 , NULL, 1, NULL);
